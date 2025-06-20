@@ -1,6 +1,7 @@
+
 import { register } from './actions';
-// import Link from 'next/link'; (Sudah diimport di atas)
-// import { Suspense } from 'react'; (Sudah diimport di atas)
+import Link from 'next/link';
+import { Suspense } from 'react';
 
 // ErrorMessage component untuk register
 function RegisterErrorMessage({ error }: { error?: string }) {
@@ -21,12 +22,12 @@ function RegisterErrorMessage({ error }: { error?: string }) {
   );
 }
 
-// Tipe PageProps bisa digunakan kembali
-// interface PageProps {
-//   searchParams?: {
-//     [key: string]: string | string[] | undefined;
-//   };
-// }
+// Perbaikan: Tipe PageProps juga perlu didefinisikan di sini
+interface PageProps {
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
+}
 
 export default function RegisterPage({ searchParams }: PageProps) {
   return (
