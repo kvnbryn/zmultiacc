@@ -1,44 +1,29 @@
-/* Mengembalikan import asli yang krusial untuk Tailwind CSS v4 */
-@import "tailwindcss";
+/* ===================================================================
+// File: app/globals.css
+// Perbaikan: Menggunakan struktur yang benar untuk Tailwind CSS v3
+// =================================================================== */
 
-/* Mengembalikan blok @theme asli dari file Anda */
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Menggunakan @layer untuk menambahkan gaya dasar dan kustom secara aman */
 @layer base {
   :root {
-    /* Menggunakan variabel dari file asli Anda untuk light mode */
-    --background: #ffffff;
-    --foreground: #171717;
+    --background: #0A0A0A;
+    --foreground: #EDEDED;
   }
-
-  @media (prefers-color-scheme: dark) {
-    :root {
-      /* Menggunakan warna gelap yang telah kita sepakati */
-      --background: #0A0A0A;
-      --foreground: #EDEDED;
-    }
-  }
-
+  
   body {
-    background-color: var(--background);
-    color: var(--foreground);
-    /* Font-family akan diterapkan dari app/layout.tsx melalui className */
+    @apply bg-gray-900 text-gray-200;
   }
 
-  /* Menambahkan transisi global yang mulus */
   * {
     @apply transition-colors duration-200;
   }
 }
 
 @layer utilities {
-  /* Menambahkan keyframes untuk animasi */
+  /* Keyframes untuk animasi */
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
@@ -49,12 +34,11 @@
     to { transform: scale(1); }
   }
 
-  /* Kelas utilitas untuk menerapkan animasi */
   .animate-fadeIn {
     animation: fadeIn 0.5s ease-out forwards;
   }
 
-  /* Scrollbar kustom yang sesuai dengan tema gelap */
+  /* Scrollbar kustom */
   ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
