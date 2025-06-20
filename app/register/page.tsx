@@ -1,4 +1,3 @@
-
 import { register } from './actions';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -22,12 +21,11 @@ function RegisterErrorMessage({ error }: { error?: string }) {
   );
 }
 
-// Perbaikan: Tipe PageProps juga perlu didefinisikan di sini
-interface PageProps {
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
-}
+// Gunakan tipe PageProps yang sama seperti di login page
+// interface PageProps {
+//   params: { [key: string]: string };
+//   searchParams: { [key: string]: string | string[] | undefined };
+// };
 
 export default function RegisterPage({ searchParams }: PageProps) {
   return (
