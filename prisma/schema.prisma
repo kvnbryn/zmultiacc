@@ -1,41 +1,43 @@
-generator client {
-  provider = "prisma-client-js"
-}
+// File: prisma/schema.prisma
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Model untuk pengguna yang login ke dashboard kita
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Model ini untuk user yang login ke WEB DASHBOARD lo.
 model User {
   id             String          @id @default(cuid())
   email          String          @unique
   password       String
   createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
+  // Satu User Dashboard bisa punya BANYAK akun Zepeto.
   zepetoAccounts ZepetoAccount[]
 }
 
-// Model untuk menyimpan akun-akun ZEPETO
+// Model ini untuk MENYIMPAN data akun Zepeto yang berhasil di-login.
 model ZepetoAccount {
-  id        String @id @default(cuid())
-  name      String // Label di dashboard
+  id             String    @id @default(cuid())
+  userId         String    // Ini PENGHUBUNG ke tabel User di atas.
+  name           String
+  zepetoEmail    String
+  zepetoPassword String
+  displayName    String?
+  username       String?
+  profilePic     String?
+  status         String    @default("PENDING")
+  lastValidatedAt DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
-  // Data dari ZEPETO
-  zepetoEmail String
-  displayName String?
-  username    String?
-  profilePic  String?
+  // Mendefinisikan relasi: Setiap ZepetoAccount PASTI dimiliki oleh satu User.
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Data Internal
-  encryptedZepetoPassword String
-  status                  String   @default("DISCONNECTED") // Status koneksi: CONNECTED, FAILED, DISCONNECTED
-  lastValidatedAt         DateTime? // Kapan terakhir kali koneksi divalidasi
-
-  // Relasi
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, zepetoEmail])
+  @@index([userId])
 }
