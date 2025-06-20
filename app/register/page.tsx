@@ -1,19 +1,16 @@
-// app/register/page.tsx
-
 import { register } from './actions';
-import Link from 'next/link';
-import { Suspense } from 'react';
+// import Link from 'next/link'; (Sudah diimport di atas)
+// import { Suspense } from 'react'; (Sudah diimport di atas)
 
-function ErrorMessage({ error }: { error?: string }) {
+// ErrorMessage component untuk register
+function RegisterErrorMessage({ error }: { error?: string }) {
   let message = '';
   if (error === 'UserExists') {
     message = 'Email ini sudah terdaftar. Silakan gunakan email lain.';
   } else if (error === 'InvalidData') {
     message = 'Data tidak valid. Pastikan email benar dan password minimal 6 karakter.';
   }
-
   if (!message) return null;
-
   return (
     <div
       aria-live="polite"
@@ -24,38 +21,39 @@ function ErrorMessage({ error }: { error?: string }) {
   );
 }
 
-export default function RegisterPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+// Tipe PageProps bisa digunakan kembali
+// interface PageProps {
+//   searchParams?: {
+//     [key: string]: string | string[] | undefined;
+//   };
+// }
+
+export default function RegisterPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-200 p-4">
-       <div className="w-full max-w-md mx-auto animate-fadeIn">
+       <div className="w-full max-w-md mx-auto">
         <div className="text-center mb-8">
             <Link href="/" className="text-3xl font-bold text-white hover:text-indigo-400 transition-colors">
                 Zepeto<span className="text-indigo-400">Hub</span>
             </Link>
             <p className="text-gray-400 mt-2">Buat akun untuk mulai mengelola.</p>
         </div>
-
         <div className="bg-gray-800/50 p-8 rounded-2xl shadow-2xl backdrop-blur-lg border border-gray-700/50">
           <form action={register} className="space-y-6">
             <Suspense fallback={null}>
-                <ErrorMessage error={searchParams?.error as string} />
+                <RegisterErrorMessage error={searchParams?.error as string} />
             </Suspense>
-
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
+              <label htmlFor="email-register" className="block text-sm font-medium text-gray-300 mb-1">Email</label>
               <input
-                id="email" name="email" type="email" required placeholder="anda@email.com"
+                id="email-register" name="email" type="email" required placeholder="anda@email.com"
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">Password (min. 6 karakter)</label>
+              <label htmlFor="password-register" className="block text-sm font-medium text-gray-300 mb-1">Password (min. 6 karakter)</label>
               <input
-                id="password" name="password" type="password" required minLength={6} placeholder="••••••••"
+                id="password-register" name="password" type="password" required minLength={6} placeholder="••••••••"
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               />
             </div>
