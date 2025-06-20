@@ -34,13 +34,12 @@ function SuccessMessage({ success }: { success?: string }) {
     );
 }
 
-// Definisikan tipe Props yang lebih lengkap untuk halaman
-type PageProps = {
-  params: { [key: string]: string };
-  searchParams: { [key: string]: string | string[] | undefined };
-};
-
-export default function LoginPage({ searchParams }: PageProps) {
+// PERBAIKAN DI SINI: Tipe didefinisikan langsung di dalam parameter fungsi
+export default function LoginPage({
+  searchParams,
+}: {
+  searchParams?: { [key: string]: string | string[] | undefined };
+}) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-200 p-4">
        <div className="w-full max-w-md mx-auto">
