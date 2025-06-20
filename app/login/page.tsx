@@ -1,4 +1,3 @@
-// app/login/page.tsx
 
 import { login } from './actions';
 import Link from 'next/link';
@@ -12,9 +11,7 @@ function ErrorMessage({ error }: { error?: string }) {
   } else if (error === 'MissingFields') {
     message = 'Harap isi email dan password.';
   }
-
   if (!message) return null;
-
   return (
     <div
       aria-live="polite"
@@ -28,7 +25,6 @@ function ErrorMessage({ error }: { error?: string }) {
 // Komponen untuk menampilkan pesan sukses dari URL (setelah registrasi)
 function SuccessMessage({ success }: { success?: string }) {
     if (success !== 'Registered') return null;
-
     return (
         <div
             aria-live="polite"
@@ -39,12 +35,14 @@ function SuccessMessage({ success }: { success?: string }) {
     );
 }
 
+// Definisikan tipe Props untuk halaman dengan benar
+interface PageProps {
+  searchParams?: {
+    [key: string]: string | string[] | undefined;
+  };
+}
 
-export default function LoginPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | string[] | undefined };
-}) {
+export default function LoginPage({ searchParams }: PageProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-gray-200 p-4">
        <div className="w-full max-w-md mx-auto">
@@ -54,45 +52,27 @@ export default function LoginPage({
             </Link>
             <p className="text-gray-400 mt-2">Selamat datang kembali! Silakan login.</p>
         </div>
-
         <div className="bg-gray-800/50 p-8 rounded-2xl shadow-2xl backdrop-blur-lg border border-gray-700/50">
           <form action={login} className="space-y-6">
-            
-            {/* Suspense-wrapped messages to handle server-side rendering of searchParams */}
             <Suspense fallback={null}>
                 <ErrorMessage error={searchParams?.error as string} />
                 <SuccessMessage success={searchParams?.success as string} />
             </Suspense>
-
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-300 mb-1"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-1">
                 Email
               </label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                placeholder="anda@email.com"
+                id="email" name="email" type="email" required placeholder="anda@email.com"
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               />
             </div>
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-300 mb-1"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-1">
                 Password
               </label>
               <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="••••••••"
+                id="password" name="password" type="password" required placeholder="••••••••"
                 className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
               />
             </div>
