@@ -34,7 +34,7 @@ function SuccessMessage({ success }: { success?: string }) {
     );
 }
 
-// PERBAIKAN DI SINI: Tipe didefinisikan langsung di dalam parameter fungsi
+// PERBAIKAN FINAL: Tipe props yang benar untuk Next.js App Router
 export default function LoginPage({
   searchParams,
 }: {
