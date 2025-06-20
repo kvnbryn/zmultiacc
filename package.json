@@ -4,29 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^6.9.0",
-    "bcryptjs": "^3.0.2",
-    "iron-session": "^8.0.4",
-    "next": "15.3.3",
-    "prisma": "^6.9.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@prisma/client": "^5.17.0",
+    "bcryptjs": "^2.4.3",
+    "iron-session": "^8.0.2",
+    "next": "14.2.5",
+    "prisma": "^5.17.0",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.3.3",
-    "tailwindcss": "^4",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.5",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
 }
