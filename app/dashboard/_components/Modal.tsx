@@ -1,7 +1,7 @@
-// /app/dashboard/_components/Modal.tsx
 'use client';
 
-import { useEffect, useRef, KeyboardEvent } from 'react';
+// Perbaikan: Hapus baris 'import { KeyboardEvent } from 'react';' jika ada
+import { useEffect, useRef } from 'react';
 
 interface ModalProps {
   isOpen: boolean;
