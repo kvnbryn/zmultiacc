@@ -1,4 +1,3 @@
-
 import { login } from './actions';
 import Link from 'next/link';
 import { Suspense } from 'react';
@@ -35,12 +34,11 @@ function SuccessMessage({ success }: { success?: string }) {
     );
 }
 
-// Definisikan tipe Props untuk halaman dengan benar
-interface PageProps {
-  searchParams?: {
-    [key: string]: string | string[] | undefined;
-  };
-}
+// Definisikan tipe Props yang lebih lengkap untuk halaman
+type PageProps = {
+  params: { [key: string]: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export default function LoginPage({ searchParams }: PageProps) {
   return (
