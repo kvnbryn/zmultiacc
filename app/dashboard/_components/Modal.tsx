@@ -1,6 +1,6 @@
 'use client';
 
-// Perbaikan: Hapus baris 'import { KeyboardEvent } from 'react';' jika ada
+// Perbaikan: Hapus baris 'import { KeyboardEvent } from 'react';' karena tidak digunakan.
 import { useEffect, useRef } from 'react';
 
 interface ModalProps {
