@@ -61,7 +61,9 @@ export function ZepetoUploader({ accounts }: { accounts: ZepetoAccount[] }) {
           )}
         </select>
         {accounts.length > 0 && accounts.filter(acc => acc.status === 'CONNECTED').length === 0 && (
-            <p className="text-xs text-yellow-400 mt-2">Tidak ada akun yang berstatus 'Terhubung'. Silakan cek koneksi di halaman <Link href="/dashboard/akun" className="underline">Manajemen Akun</Link>.</p>
+            <p className="text-xs text-yellow-400 mt-2">
+                Tidak ada akun yang berstatus &apos;Terhubung&apos;. Silakan cek koneksi di halaman <Link href="/dashboard/akun" className="underline">Manajemen Akun</Link>.
+            </p>
         )}
       </div>
 
