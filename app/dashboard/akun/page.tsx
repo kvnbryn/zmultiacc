@@ -6,7 +6,6 @@ import { getZepetoAccounts, addZepetoAccount, deleteZepetoAccount, validateAccou
 import type { ZepetoAccount } from '@prisma/client';
 import { Modal } from '../_components/Modal';
 
-// --- Komponen UI ---
 function StatusIndicator({ status, lastValidatedAt }: { status: string; lastValidatedAt?: Date | null }) {
     const isConnected = status === 'CONNECTED';
     const statusText = isConnected ? 'Terhubung' : 'Gagal';
@@ -32,6 +31,8 @@ function AccountCard({ account, onAction }: { account: ZepetoAccount, onAction: 
             <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                     {account.profilePic ? (
+                        // Perbaikan: Menambahkan komentar untuk menonaktifkan aturan ESLint next/no-img-element
+                        // eslint-disable-next-line @next/next/no-img-element
                         <img 
                             src={account.profilePic} 
                             alt={account.displayName || ''} 
@@ -67,15 +68,16 @@ function AccountCard({ account, onAction }: { account: ZepetoAccount, onAction: 
     );
 }
 
-// --- Komponen Halaman Utama ---
 export default function AkunPage() {
     const [accounts, setAccounts] = useState<ZepetoAccount[]>([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [isPending, startTransition] = useTransition();
+    // Perbaikan: Hapus 'isPending' karena tidak digunakan
+    const [, startTransition] = useTransition();
 
     const fetchAccounts = () => {
         startTransition(async () => {
+            setIsLoading(true);
             const fetchedAccounts = await getZepetoAccounts();
             setAccounts(fetchedAccounts);
             setIsLoading(false);
@@ -114,7 +116,8 @@ export default function AkunPage() {
                 {accounts.length === 0 && (
                     <div className="text-center py-16 px-6 bg-gray-800/50 rounded-2xl border border-gray-700/50">
                         <h3 className="text-lg font-semibold text-white">Belum Ada Akun</h3>
-                        <p className="text-gray-400 mt-2">Klik tombol 'Tambah Akun' untuk memulai.</p>
+                        {/* Perbaikan: Menggunakan &apos; untuk single quote */}
+                        <p className="text-gray-400 mt-2">Klik tombol &apos;Tambah Akun&apos; untuk memulai.</p>
                     </div>
                 )}
             </>
