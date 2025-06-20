@@ -33,8 +33,7 @@ export async function deleteZepetoAccount(formData: FormData) {
 
 export async function validateAccount(formData: FormData) {
     const accountId = formData.get('accountId') as string;
-    console.log(`Memulai validasi ulang untuk akun ID: ${accountId}`);
-    const randomSuccess = Math.random() > 0.2; // Simulasi
+    const randomSuccess = Math.random() > 0.2;
     if (randomSuccess) {
         await prisma.zepetoAccount.update({
             where: { id: accountId },
@@ -150,8 +149,11 @@ export async function uploadZepetoItem(formData: FormData) {
         if (!itemResponse.ok && itemResponse.status !== 500) throw new Error(`Langkah 3 Gagal: Membuat Item Final`);
 
         return { success: true, message: `Upload item ${zepetoFile.name} berhasil diproses OTOMATIS!` };
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("Proses upload otomatis gagal:", error);
-        return { success: false, message: error.message };
+        if (error instanceof Error) {
+            return { success: false, message: error.message };
+        }
+        return { success: false, message: "Terjadi kesalahan yang tidak diketahui." };
     }
 }
