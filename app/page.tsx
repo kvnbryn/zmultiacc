@@ -1,102 +1,116 @@
-import Image from "next/image";
+// app/page.tsx
 
-export default function Home() {
+import Link from 'next/link';
+import { getSession } from '@/lib/session';
+import { redirect } from 'next/navigation';
+
+// Komponen untuk ikon-ikon fitur (SVG inline untuk mengurangi dependensi)
+const FeatureIcon = ({ path }: { path: string }) => (
+  <svg
+    className="w-10 h-10 mb-4 text-indigo-400"
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d={path}
+    ></path>
+  </svg>
+);
+
+export default async function LandingPage() {
+  const session = await getSession();
+
+  // Jika sudah login, langsung redirect ke dashboard seperti sebelumnya
+  if (session.isLoggedIn) {
+    redirect('/dashboard');
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="flex flex-col min-h-screen bg-gray-900 text-gray-200 font-sans">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-900/80 backdrop-blur-sm">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-white">
+            Zepeto<span className="text-indigo-400">Hub</span>
+          </h1>
+          <nav>
+            <Link
+              href="/login"
+              className="px-6 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-500 transition-colors duration-300"
+            >
+              Login
+            </Link>
+          </nav>
         </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="flex-grow">
+        {/* Hero Section */}
+        <section className="container mx-auto px-6 pt-32 pb-16 text-center flex flex-col items-center">
+          <div className="max-w-3xl">
+            <h2 className="text-5xl md:text-6xl font-extrabold leading-tight text-white mb-4">
+              Manajemen Akun ZEPETO, Dibuat Simpel.
+            </h2>
+            <p className="text-lg md:text-xl text-gray-400 mb-8">
+              Satu dashboard untuk mengelola semua akun ZEPETO Anda. Unggah konten, pantau status, dan tingkatkan produktivitas Anda.
+            </p>
+            <Link
+              href="/register"
+              className="px-8 py-4 bg-indigo-600 text-white font-bold rounded-full hover:bg-indigo-500 transition-transform duration-300 transform hover:scale-105 inline-block"
+            >
+              Mulai Sekarang Gratis
+            </Link>
+          </div>
+        </section>
+
+        {/* Features Section */}
+        <section id="features" className="bg-gray-800 py-20">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-12">
+              <h3 className="text-4xl font-bold text-white">Fitur Unggulan Kami</h3>
+              <p className="text-gray-400 mt-2">Semua yang Anda butuhkan untuk efisiensi maksimal.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {/* Feature 1 */}
+              <div className="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                <FeatureIcon path="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a3.001 3.001 0 015.658 0M12 6V3m0 3h-3m3 0h3" />
+                <h4 className="text-xl font-semibold text-white mb-2">Multi-Akun</h4>
+                <p className="text-gray-400">
+                  Tambahkan dan kelola beberapa akun ZEPETO dari satu tempat tanpa perlu login berulang kali.
+                </p>
+              </div>
+              {/* Feature 2 */}
+              <div className="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                <FeatureIcon path="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                <h4 className="text-xl font-semibold text-white mb-2">Upload Otomatis</h4>
+                <p className="text-gray-400">
+                  Jadwalkan dan unggah item .zepeto ke akun pilihan Anda dengan beberapa klik saja.
+                </p>
+              </div>
+              {/* Feature 3 */}
+              <div className="bg-gray-900 p-8 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                <FeatureIcon path="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <h4 className="text-xl font-semibold text-white mb-2">Validasi Status</h4>
+                <p className="text-gray-400">
+                  Cek status koneksi setiap akun secara real-time untuk memastikan semua berjalan lancar.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 py-6">
+        <div className="container mx-auto px-6 text-center text-gray-500">
+          <p>&copy; {new Date().getFullYear()} ZepetoHub. All rights reserved.</p>
+        </div>
       </footer>
     </div>
   );

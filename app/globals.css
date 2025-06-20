@@ -1,10 +1,7 @@
+/* Mengembalikan import asli yang krusial untuk Tailwind CSS v4 */
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/* Mengembalikan blok @theme asli dari file Anda */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,15 +9,64 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* Menggunakan @layer untuk menambahkan gaya dasar dan kustom secara aman */
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Menggunakan variabel dari file asli Anda untuk light mode */
+    --background: #ffffff;
+    --foreground: #171717;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Menggunakan warna gelap yang telah kita sepakati */
+      --background: #0A0A0A;
+      --foreground: #EDEDED;
+    }
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    /* Font-family akan diterapkan dari app/layout.tsx melalui className */
+  }
+
+  /* Menambahkan transisi global yang mulus */
+  * {
+    @apply transition-colors duration-200;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Menambahkan keyframes untuk animasi */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes scaleIn {
+    from { transform: scale(0.95); }
+    to { transform: scale(1); }
+  }
+
+  /* Kelas utilitas untuk menerapkan animasi */
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  /* Scrollbar kustom yang sesuai dengan tema gelap */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #1f2937; /* gray-800 */
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #4b5563; /* gray-600 */
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6b7280; /* gray-500 */
+  }
 }

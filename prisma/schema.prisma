@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Model untuk pengguna yang login ke dashboard kita
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  password       String
+  createdAt      DateTime        @default(now())
+  zepetoAccounts ZepetoAccount[]
+}
+
+// Model untuk menyimpan akun-akun ZEPETO
+model ZepetoAccount {
+  id        String @id @default(cuid())
+  name      String // Label di dashboard
+
+  // Data dari ZEPETO
+  zepetoEmail String
+  displayName String?
+  username    String?
+  profilePic  String?
+
+  // Data Internal
+  encryptedZepetoPassword String
+  status                  String   @default("DISCONNECTED") // Status koneksi: CONNECTED, FAILED, DISCONNECTED
+  lastValidatedAt         DateTime? // Kapan terakhir kali koneksi divalidasi
+
+  // Relasi
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, zepetoEmail])
+}
