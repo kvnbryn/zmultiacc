@@ -5,17 +5,18 @@ import { getSession } from '@/lib/session';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+// TIDAK ADA LAGI IMPORT 'ENCRYPT', 'DECRYPT', ATAU 'BCRYPT'
+
 export async function logout() {
   const session = await getSession();
   session.destroy();
   redirect('/login');
 }
 
-export async function getZepetoAccounts() {
-  const session = await getSession();
-  if (!session.userId) return [];
+export async function getZepetoAccounts(userId: string) {
+  if (!userId) return [];
   const accounts = await prisma.zepetoAccount.findMany({
-    where: { userId: session.userId },
+    where: { userId },
     orderBy: { createdAt: 'desc' },
   });
   return accounts;
@@ -28,13 +29,13 @@ export async function deleteZepetoAccount(formData: FormData) {
     await prisma.zepetoAccount.delete({
         where: { id: accountId, userId: session.userId }
     });
-    revalidatePath('/dashboard/akun');
+    revalidatePath('/dashboard');
 }
 
 export async function validateAccount(formData: FormData) {
     const accountId = formData.get('accountId') as string;
     console.log(`Memulai validasi ulang untuk akun ID: ${accountId}`);
-    const randomSuccess = Math.random() > 0.2; // Simulasi
+    const randomSuccess = Math.random() > 0.2;
     if (randomSuccess) {
         await prisma.zepetoAccount.update({
             where: { id: accountId },
@@ -46,16 +47,17 @@ export async function validateAccount(formData: FormData) {
             data: { status: 'FAILED', lastValidatedAt: new Date() }
         });
     }
-    revalidatePath('/dashboard/akun');
+    revalidatePath('/dashboard');
 }
 
+// ===== FUNGSI ADD ACCOUNT - TANPA ENKRIPSI =====
 export async function addZepetoAccount(formData: FormData) {
   const session = await getSession();
   if (!session.userId) throw new Error('Not authenticated');
 
   const zepetoId = formData.get('zepetoEmail') as string; 
   const password = formData.get('zepetoPassword') as string;
-  const nameLabel = formData.get('name') as string || 'Zepeto Account';
+  const nameLabel = formData.get('name') as string;
 
   try {
     const loginUrl = 'https://cf-api-studio.zepeto.me/api/authenticate/zepeto-id';
@@ -75,6 +77,7 @@ export async function addZepetoAccount(formData: FormData) {
           userId: session.userId, 
           name: nameLabel, 
           zepetoEmail: zepetoId,
+          // PERINGATAN: Menyimpan password sebagai plain text
           encryptedZepetoPassword: password, 
           displayName: profile.name, 
           username: profile.userId, 
@@ -83,13 +86,14 @@ export async function addZepetoAccount(formData: FormData) {
           lastValidatedAt: new Date(),
         },
     });
-    revalidatePath('/dashboard/akun');
+    revalidatePath('/dashboard');
   } catch (error) { 
     console.error("Proses tambah akun ZEPETO gagal:", error); 
     throw error; 
   }
 }
 
+// ===== FUNGSI UPLOAD OTOMATIS - MENGAMBIL PASSWORD PLAIN TEXT DARI DB =====
 export async function uploadZepetoItem(formData: FormData) {
     const session = await getSession();
     if (!session.userId) return { success: false, message: 'Sesi tidak valid.' };
@@ -97,10 +101,6 @@ export async function uploadZepetoItem(formData: FormData) {
     const accountId = formData.get('accountId') as string;
     const categoryKey = formData.get('category') as string;
     const zepetoFile = formData.get('zepetoFile') as File;
-
-    if (!accountId || !categoryKey || !zepetoFile || zepetoFile.size === 0) {
-        return { success: false, message: 'Harap lengkapi semua field.' };
-    }
 
     const account = await prisma.zepetoAccount.findUnique({ where: { id: accountId } });
     if (!account) return { success: false, message: 'Akun ZEPETO tidak ditemukan.' };
@@ -119,7 +119,7 @@ export async function uploadZepetoItem(formData: FormData) {
         const loginData = await loginResponse.json();
         const bearerToken = `Bearer ${loginData.authToken}`;
         
-        const categoryIdMap: { [key: string]: string } = { 'hair': '61681e66ec485e4a0df0d476', 'top': 'DR_TOP_01', 'bottom': 'DR_PANTS_01', 'dress': 'DR_DRESS_01', 'shoes': 'SH_SHOES_01' };
+        const categoryIdMap: { [key: string]: string } = { 'hair': '61681e66ec485e4a0df0d476' };
         const categoryId = categoryIdMap[categoryKey];
 
         const assetFormData = new FormData();
